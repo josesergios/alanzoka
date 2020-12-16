@@ -3,11 +3,13 @@ const {TranslationServiceClient} = require('@google-cloud/translate');
 const { response } = require('express');
 const translate = require('translate-google')
 const controllerAlanzoka = module.exports = {};
+const apphuggy = require('./apphuggy');
 
 // const translate = new Translate();
 
 
-module.exports.translateMessage = async (message) =>{
+module.exports.translateMessage = async (message, chatID, apiKey) =>{
+
     return new Promise((resolve, reject) =>{
             const location = 'global';
         // const text = 'good night';
@@ -34,9 +36,10 @@ module.exports.translateMessage = async (message) =>{
 
             let res = response.translations[0]
             let result = res.translatedText
-            return resolve({
-                result: result
-            })
+
+            return resolve(
+                 result
+            )
 
         } catch (error) {
             console.error(error.details);

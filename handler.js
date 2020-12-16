@@ -1,6 +1,6 @@
 'use strict';
 const ControllerAlanzoka = require('./ControllerAlanzoka');
-// const controllerAlanzoka = new ControllerAlanzoka();
+const apphuggy = require('./apphuggy');
 
 module.exports.main = event => {
     let path = event.path;
@@ -9,15 +9,31 @@ module.exports.main = event => {
         try{
             if(path === "/traduzir"){
                 let body = JSON.parse(event.body);
-                console.log("ESTE É O BODY EVENTO: ", body.message);
-                let message = body.message;
+                // console.log("ESTE É O BODY EVENTO: ", body.messages.receivedMessage);
+                // console.log("TOKEN API HUGGY: ", body.token);//descomentar
+                // console.log("ESSE É O BODY EVENTO: ", body)//descomentar
+                console.log("ESSE É O TOKEN: ", body.token)//descomentar
+                // let apiKey = body.token;
+                let apiKey = "7e602a1aa3c3f589c12710ba380b387b";
+                let messagemTraduzir = body.messages.receivedAllMessage[0];//descomentar
+                console.log("ESTE É O BODY COM O CHAT: ", messagemTraduzir.chat.id) // descomentar
+                console.log("ESTA É A MENSAGEM A SER TRADUZIDA: ", messagemTraduzir.body);//descomentar
+                // console.log("ESTE É O BODY EVENTO: ", body.message);
+                let chatID = messagemTraduzir.chat.id;
+                let message = messagemTraduzir.body; // decomentar
                 // console.log("Essa é a mensagem: ",message)
-                let mensagemCliente = await ControllerAlanzoka.translateMessage(message);
+                let mensagemCliente = await ControllerAlanzoka.translateMessage(message, chatID, apiKey);
                 console.log("sucesso!");
+                // console.log("ESTA É A MENSAGEM TRADUZIDA: ", mensagemCliente);
+                
+                // let mensagemTraduzida = mensagemCliente;
+                // console.log("ESTA É A MENSAGEM TRADUZIDA: ", mensagemTraduzida);
+
+                await apphuggy.sendLoopInternal(`Tradução: ${mensagemCliente}`, chatID, apiKey);
                 
                 return resolve({
-                    statusCode: 200,
-                    body: JSON.stringify(mensagemCliente)
+                    statusCode: 200
+                    // body: JSON.stringify(mensagemCliente)
                 });
             }
         }catch(e){
