@@ -8,7 +8,7 @@ const apphuggy = require('./apphuggy');
 // const translate = new Translate();
 
 
-module.exports.translateMessage = async (message, chatID, apiKey) =>{
+module.exports.translateMessage = async (message) =>{
 
     return new Promise((resolve, reject) =>{
             const location = 'global';
