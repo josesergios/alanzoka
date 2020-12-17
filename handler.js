@@ -8,7 +8,31 @@ module.exports.main = event => {
     
     return new Promise(async (resolve, reject) => {
         try{
-            /*
+            
+
+             //receivedAllMessage
+            if(path === "/traduzir"){
+                let body = JSON.parse(event.body);
+                let internal = body.messages.receivedAllMessage[0];
+                if (internal.is_internal === true) {
+                    return resolve({
+                        statusCode: 200,
+                        body: "Mensagem já traduzida"
+                    });     
+                }
+
+                let apiKey = "7e602a1aa3c3f589c12710ba380b387b";
+                let messagemTraduzir = body.messages.receivedAllMessage[0];
+                let chatID = messagemTraduzir.chat.id;
+                let message = messagemTraduzir.body; 
+
+                console.log("ESTA É A MENSAGEM A SER TRADUZIDA:", messagemTraduzir.body);
+                let mensagemCliente = await ControllerAlanzoka.translateMessage(message);
+                console.log("sucesso!");
+                // console.log("É MENSAGEM INTERNA?: ", internal.is_internal);
+                // console.log("ESTE É O BODY COM O CHAT: ", messagemTraduzir.chat.id) 
+
+                /*
             if(path === "/traduzir"){
                 let body = JSON.parse(event.body);
                 // console.log("ESTE É O BODY EVENTO: ", body.messages.receivedMessage);
@@ -37,61 +61,44 @@ module.exports.main = event => {
                     // body: JSON.stringify(mensagemCliente)
                 });
             }*/
-                // let final = await apphuggy.sendLoopInternal(`Tradução: ${mensagemCliente}`, chatID, apiKey);
-                // return resolve(controllerMisc.res(200, final));
 
-             //receivedAllMessage
-            if(path === "/traduzir"){
-                let body = JSON.parse(event.body);
-                // console.log("ESTE É O BODY EVENTO: ", body.messages.receivedMessage);
-                // console.log("TOKEN API HUGGY: ", body.token);//descomentar
-                // console.log("ESSE É O BODY EVENTO: ", body)//descomentar
-                console.log("ESSE É O TOKEN: ", body.token)//descomentar
+                //sendedAllMessage
+                /*let body = JSON.parse(event.body);
+                console.log(body)
+                let internal2 = body.messages.sentAllMessage[0];
 
-                let internal = body.messages.receivedAllMessage[0];
-                // let internal2 = body.messages.sendedAllMessage[0];
-                console.log("ESSA É UMA MENSAGEM INTERNA COM A TRADUÇÃO DO CLIENTE: ", internal.is_internal);
-                // console.log("ESSA É UMA MENSAGEM INTERNA COM A TRADUÇÃO DO AGENTE: ", internal2.is_internal);
+                console.log("ESSA É UMA MENSAGEM INTERNA COM A TRADUÇÃO DO AGENTE: ", internal2);
+                console.log("ESSA É UMA MENSAGEM INTERNA COM A TRADUÇÃO DO AGENTE: ", internal2.is_internal);
 
-                // let apiKey = body.token;
-                let apiKey = "7e602a1aa3c3f589c12710ba380b387b";
-                let messagemTraduzir = body.messages.receivedAllMessage[0];//descomentar
-                console.log("ESTE É O BODY COM O CHAT: ", messagemTraduzir.chat.id) // descomentar
-                console.log("ESTA É A MENSAGEM A SER TRADUZIDA: ", messagemTraduzir.body);//descomentar
-                // console.log("ESTE É O BODY EVENTO: ", body.message);
-                let chatID = messagemTraduzir.chat.id;
-                let message = messagemTraduzir.body; // decomentar
-                // console.log("Essa é a mensagem: ",message)
-                let mensagemCliente = await ControllerAlanzoka.translateMessage(message);
-                console.log("sucesso!");
-                
-                if (internal.is_internal === true) {
-                    return reject({
-                        statusCode: 200,
-                        body: JSON.stringify("Mensagem já traduzida")
-                    });     
-                }
-                
-                
+                if (internal2.is_internal === true) {
+                    let apiKey = "7e602a1aa3c3f589c12710ba380b387b";
 
-                // console.log("ESTA É A MENSAGEM TRADUZIDA: ", mensagemCliente);
-                
-                // let mensagemTraduzida = mensagemCliente;
-                // console.log("ESTA É A MENSAGEM TRADUZIDA: ", mensagemTraduzida);
+                    let messagemTraduzir = body.messages;
+                    console.log("ESSA É O .sendedAllMessage", messagemTraduzir)
+                    let chatID = messagemTraduzir.chat.id;
+                    let message = messagemTraduzir.body; // decomentar
+                    console.log("ESTE É O BODY COM O CHAT: ", messagemTraduzir.chat.id) // descomentar
+                    console.log("ESTA É A MENSAGEM A SER TRADUZIDA: ", messagemTraduzir.body);//descomentar
+
+                    let mensagemCliente = await ControllerAlanzoka.translateMessage(message);
+                    console.log("sucesso!");
+                    await apphuggy.sendLoop(`Tradução: ${mensagemCliente}`, chatID, apiKey);
+                    return resolve({
+                        statusCode: 200
+                        // body: JSON.stringify(mensagemCliente)
+                    });  
+                }*/
 
                 await apphuggy.sendLoopInternal(`Tradução: ${mensagemCliente}`, chatID, apiKey);
                 return resolve({
                     statusCode: 200
-                    // body: JSON.stringify(mensagemCliente)
                 });
-                
-                // let final = await apphuggy.sendLoopInternal(`Tradução: ${mensagemCliente}`, chatID, apiKey);
-                // return resolve(controllerMisc.res(200, final));
             }
-        }catch(e){
+            }
+        catch(e){
             console.log("Erro na function", e);
             return reject({
-                statusCode: 500,
+                statusCode: 200,
                 body: JSON.stringify("Erro")
             });
         }

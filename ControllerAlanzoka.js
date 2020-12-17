@@ -1,7 +1,7 @@
 // const {Translate} = require('@google-cloud/translate').v2;
 const {TranslationServiceClient} = require('@google-cloud/translate');
-const { response } = require('express');
 const translate = require('translate-google')
+const { response } = require('express');
 const controllerAlanzoka = module.exports = {};
 const apphuggy = require('./apphuggy');
 
@@ -31,7 +31,7 @@ module.exports.translateMessage = async (message) =>{
             const [response] = await translationClient.translateText(request);
             
             for (const translation of response.translations) {
-            console.log(`Translation: ${translation.translatedText}`);
+            console.log(`Tradução: ${translation.translatedText}`);
             }
 
             let res = response.translations[0]
