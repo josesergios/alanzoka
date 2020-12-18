@@ -11,23 +11,24 @@ module.exports.main = event => {
             
 
              //receivedAllMessage
-            if(path === "/traduzir"){
-                let body = JSON.parse(event.body);
-                let internal = body.messages.receivedAllMessage[0];
-                if (internal.is_internal === true) {
+            if(path === "/traduzir"){ //Endpoint que recebe o webhook da huggy
+
+                let body = JSON.parse(event.body); //variável que recebe o event do webhook
+                let internal = body.messages.receivedAllMessage[0]; //variavel que recebe um valor que veio no event
+                if (internal.is_internal === true) {//condição quee verifica se é mensagem interna
                     return resolve({
                         statusCode: 200,
                         body: "Mensagem já traduzida"
                     });     
                 }
 
-                let apiKey = "7e602a1aa3c3f589c12710ba380b387b";
-                let messagemTraduzir = body.messages.receivedAllMessage[0];
-                let chatID = messagemTraduzir.chat.id;
+                let apiKey = "7e602a1aa3c3f589c12710ba380b387b"; //token da conta do cliente
+                let messagemTraduzir = body.messages.receivedAllMessage[0]; // variavel que recebe o texto que será traduzido
+                let chatID = messagemTraduzir.chat.id; //variável que pega o ID do chat do cliente
                 let message = messagemTraduzir.body; 
 
                 console.log("ESTA É A MENSAGEM A SER TRADUZIDA:", messagemTraduzir.body);
-                let mensagemCliente = await ControllerAlanzoka.translateMessage(message);
+                let mensagemCliente = await ControllerAlanzoka.translateMessage(message); //essa variável está recebendo o retorno do método que realiza a tradução do texto
                 console.log("sucesso!");
                 // console.log("É MENSAGEM INTERNA?: ", internal.is_internal);
                 // console.log("ESTE É O BODY COM O CHAT: ", messagemTraduzir.chat.id) 
@@ -89,7 +90,7 @@ module.exports.main = event => {
                     });  
                 }*/
 
-                await apphuggy.sendLoopInternal(`Tradução: ${mensagemCliente}`, chatID, apiKey);
+                await apphuggy.sendLoopInternal(`Tradução: ${mensagemCliente}`, chatID, apiKey); //esse metodo chama uma função que envia uma mensagem interna para o agente com o texto traduzido
                 return resolve({
                     statusCode: 200
                 });
